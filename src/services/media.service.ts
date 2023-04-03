@@ -3,6 +3,7 @@ import { BaseDTO } from '../common/dtos/common/BaseDTO';
 import { InjectModel, Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { MEDIA_TYPE } from 'src/common/const/media.const';
 
 @Schema()
 export class Media extends BaseDTO {
