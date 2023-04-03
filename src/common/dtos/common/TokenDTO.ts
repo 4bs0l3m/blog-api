@@ -1,4 +1,4 @@
 export class TokenDTO {
-  id: string;
+  userId: string;
   email: string;
 }

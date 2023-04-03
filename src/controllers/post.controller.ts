@@ -3,13 +3,23 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { PostDTO } from '../common/dtos/cms/postDTO';
 import { QueryDTO } from 'src/common/dtos/common/QueryDTO';
 import { PostService } from '../services/post.service';
 import { Request } from 'express';
 import { AuthHelper } from '../helpers/auth.helper';
 import { ResponseHelper } from '../helpers/response.helper';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { UserDTO } from 'src/common/dtos/cms/userDTO';
 
 @Controller('post')
 export class PostController {
@@ -37,26 +47,36 @@ export class PostController {
     const result = await this.postService.getByCategoryId(categoryId, query);
     return this.responseHelper.response(result.data, result.count);
   }
+
+  @UseGuards(AuthGuard)
   @Post('create')
   async create(@Req() request: Request, @Body() model: PostDTO) {
     console.log('model :', model);
-    const user = this.authHelper.extractToken(request.headers.authorization);
+    const user = <UserDTO>request.user;
     console.log('user :', user);
 
     const result = await this.postService.create(model, user.id);
     return this.responseHelper.response(result);
   }
+
+  @UseGuards(AuthGuard)
   @Post('update')
   async update(@Req() request: Request, @Body() model: PostDTO) {
     const user = this.authHelper.extractToken(request.headers.authorization);
 
-    const result = await this.postService.updateById(model.id, model, user.id);
+    const result = await this.postService.updateById(
+      model.id,
+      model,
+      user.userId,
+    );
     return this.responseHelper.response(result);
   }
+
+  @UseGuards(AuthGuard)
   @Get('delete/:id')
   async delete(@Req() request: Request) {
     const id = request.params.id;
-    const user = this.authHelper.extractToken(request.headers.authorization);
+    const user = <UserDTO>request.user;
 
     const result = await this.postService.deleteById(id, user.id);
     return this.responseHelper.response(result);

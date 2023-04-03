@@ -3,12 +3,21 @@ import { JwtService } from '@nestjs/jwt';
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Controller, Get, HttpStatus, Post, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { User, UserService } from '../services/user.service';
 import { AuthHelper } from '../helpers/auth.helper';
 import { ResponseHelper } from '../helpers/response.helper';
 import { ProfileService } from '../services/profile.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { UserDTO } from 'src/common/dtos/cms/userDTO';
 
 @Controller('auth')
 export class AuthController {
@@ -30,7 +39,7 @@ export class AuthController {
           userCred.password,
         );
         const access_token = this.jwtService.sign({
-          id: _user.id,
+          userId: _user.id,
           email: _user.email,
         });
         return this.responseHelper.response(access_token);
@@ -44,23 +53,18 @@ export class AuthController {
       return this.responseHelper.error();
     }
   }
-
+  @UseGuards(AuthGuard)
   @Get('currentUser')
   async currentUser(@Req() request: Request) {
     try {
-      const currentUser = this.authHelper.extractToken(
-        request.headers.authorization,
-      );
-      if (currentUser) {
-        const user = await this.userService.findById(currentUser.id);
-        if (user) {
-          return this.responseHelper.response({
-            id: user.id,
-            email: user.email,
-            activate: user.activate,
-            profile: this.profileService.getByUserId(user.id),
-          });
-        }
+      const user = <UserDTO>request.user;
+      if (user) {
+        return this.responseHelper.response({
+          id: user.id,
+          email: user.email,
+          activate: user.activate,
+          profile: this.profileService.getByUserId(user.id),
+        });
       } else {
         return this.responseHelper.error(
           'Invalid authorization!',

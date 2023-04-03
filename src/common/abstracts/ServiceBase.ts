@@ -18,9 +18,16 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
     return this.model.findOne(filter).exec();
   }
   async findAll(query: QueryDTO) {
+    const filter = {};
+    // if (query.fields) {
+    //   query.fields.forEach((item) => {
+    //     filter[item.fieldName] = item.value;
+    //   });
+    // }
+    console.log('filter :', filter);
     return {
       data: await this.model
-        .find()
+        .find(filter)
         .limit(Number(query.limit))
         .skip(Number(query.skip))
         .sort(query.orderBy)

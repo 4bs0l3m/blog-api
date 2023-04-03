@@ -2,8 +2,18 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
+import { UserDTO } from 'src/common/dtos/cms/userDTO';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { MediaDTO } from '../common/dtos/cms/mediaDTO';
 
 import { QueryDTO } from '../common/dtos/common/QueryDTO';
@@ -35,24 +45,30 @@ export class MediaController {
     const result = await this.mediaService.getByKey(key);
     return this.responseHelper.response(result);
   }
+
+  @UseGuards(AuthGuard)
   @Post('create')
   async create(@Req() request: Request, @Body() model: MediaDTO) {
-    const user = this.authHelper.extractToken(request.headers.authorization);
+    const user = <UserDTO>request.user;
 
     const result = await this.mediaService.create(model, user.id);
     return this.responseHelper.response(result);
   }
+
+  @UseGuards(AuthGuard)
   @Post('update')
   async update(@Req() request: Request, @Body() model: MediaDTO) {
-    const user = this.authHelper.extractToken(request.headers.authorization);
+    const user = <UserDTO>request.user;
 
     const result = await this.mediaService.updateById(model.id, model, user.id);
     return this.responseHelper.response(result);
   }
+
+  @UseGuards(AuthGuard)
   @Get('delete/:id')
   async delete(@Req() request: Request) {
     const id = request.params.id;
-    const user = this.authHelper.extractToken(request.headers.authorization);
+    const user = <UserDTO>request.user;
 
     const result = await this.mediaService.deleteById(id, user.id);
     return this.responseHelper.response(result);

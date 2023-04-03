@@ -13,7 +13,7 @@ export class Media extends BaseDTO {
   @Prop()
   url: string;
   @Prop()
-  postId: string;
+  referenceId: string;
 }
 export type MediaDocument = HydratedDocument<Media>;
 
@@ -29,6 +29,16 @@ export class MediaService extends ServiceBase<Media, MediaDocument> {
       .findOne({
         key: key,
       })
+      .exec();
+  }
+  getProfilePictureByUserId(id: string) {
+    return this._model
+      .findOne({ referenceId: id, type: MEDIA_TYPE.PROFILE_PICTURE })
+      .exec();
+  }
+  getPostFeatureByPostId(id: string) {
+    return this._model
+      .findOne({ referenceId: id, type: MEDIA_TYPE.PROFILE_PICTURE })
       .exec();
   }
 }
