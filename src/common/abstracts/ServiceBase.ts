@@ -28,10 +28,11 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
       count: await this.model.count().exec(),
     };
   }
-  getCount() {}
+
   find(filter: DTO | any) {
     return this.model.find(filter).exec();
   }
+
   findById(id: string) {
     return this.model.findOne({ id: id }).exec();
   }

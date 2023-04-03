@@ -3,7 +3,7 @@ https://docs.nestjs.com/controllers#controllers
 */
 
 import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
-import { Request, response } from 'express';
+import { Request } from 'express';
 import { MediaDTO } from '../common/dtos/cms/mediaDTO';
 
 import { QueryDTO } from '../common/dtos/common/QueryDTO';
@@ -27,6 +27,12 @@ export class MediaController {
   async getById(@Req() request: Request) {
     const id = request.params.id;
     const result = await this.mediaService.findById(id);
+    return this.responseHelper.response(result);
+  }
+  @Get('key/:key')
+  async getByKey(@Req() request: Request) {
+    const key = request.params.key;
+    const result = await this.mediaService.getByKey(key);
     return this.responseHelper.response(result);
   }
   @Post('create')

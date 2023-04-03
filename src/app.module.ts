@@ -21,14 +21,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthHelper } from './helpers/auth.helper';
 import { ResponseHelper } from './helpers/response.helper';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthController } from './controllers/auth.controller';
+import { Env } from './env';
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: 'secretKey',
+      secret: Env.secretKey,
       signOptions: { expiresIn: '12h' },
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/test'),
+    MongooseModule.forRoot(Env.mongoDb),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Post.name, schema: PostSchema },
@@ -38,6 +40,7 @@ import { JwtModule } from '@nestjs/jwt';
     ]),
   ],
   controllers: [
+    AuthController,
     MediaController,
     CategoryController,
     PostController,

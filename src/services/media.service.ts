@@ -12,6 +12,8 @@ export class Media extends BaseDTO {
   type: string;
   @Prop()
   url: string;
+  @Prop()
+  postId: string;
 }
 export type MediaDocument = HydratedDocument<Media>;
 

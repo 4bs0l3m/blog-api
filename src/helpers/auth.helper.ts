@@ -11,8 +11,12 @@ export class AuthHelper {
       if (authorizationArr && authorizationArr.length === 2) {
         const [type, token] = authorizationArr;
         if (type === 'Bearer') {
-          const decriptedToken = this.jwtService.verify(token);
-          return <TokenDTO>decriptedToken;
+          try {
+            const decriptedToken = this.jwtService.verify(token);
+            return <TokenDTO>decriptedToken;
+          } catch {
+            return null;
+          }
         }
       }
     }
