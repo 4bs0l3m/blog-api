@@ -99,4 +99,23 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
       return null;
     }
   }
+  async join(from: string, field: string) {
+    const result = await this.model
+      .aggregate([
+        {
+          $lookup: {
+            from: from.toLocaleLowerCase() + 's',
+            localField: field,
+            foreignField: 'id',
+            as: from,
+          },
+        },
+      ])
+      .exec();
+    return result.map((item) => {
+      const reVal = item;
+      reVal[from] = item[from][0];
+      return reVal;
+    });
+  }
 }
