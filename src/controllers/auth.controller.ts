@@ -63,7 +63,7 @@ export class AuthController {
           id: user.id,
           email: user.email,
           activate: user.activate,
-          profile: this.profileService.getByUserId(user.id),
+          profile: await this.profileService.getByUserId(user.id),
         });
       } else {
         return this.responseHelper.error(

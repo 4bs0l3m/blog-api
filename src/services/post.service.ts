@@ -36,4 +36,32 @@ export class PostService extends ServiceBase<Post, PostDocument> {
       count: await this._model.find({ categoryId: id }).count().exec(),
     };
   }
+  async getPostList(query: QueryDTO) {
+    const result = await this._model
+      .aggregate([
+        {
+          $lookup: {
+            from: 'profiles',
+            localField: 'authorId',
+            foreignField: 'userId',
+            as: 'user',
+          },
+        },
+        {
+          $lookup: {
+            from: 'categories',
+            localField: 'categoryId',
+            foreignField: 'id',
+            as: 'category',
+          },
+        },
+      ])
+      .exec();
+    return result.map((item) => {
+      const reVal = item;
+      reVal['user'] = item['user'][0];
+      reVal['category'] = item['category'][0];
+      return reVal;
+    });
+  }
 }
