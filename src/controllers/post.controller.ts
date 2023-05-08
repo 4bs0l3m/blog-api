@@ -30,8 +30,10 @@ export class PostController {
   ) {}
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
-    const result = await this.postService.findAll(query);
-    return this.responseHelper.response(result.data, result.count);
+    const result = await this.postService.getPostList(query);
+    const count = await this.postService.getCount();
+
+    return this.responseHelper.response(result, count);
   }
   @Get(':id')
   async getById(@Req() request: Request) {

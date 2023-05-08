@@ -17,6 +17,9 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
   findOne(filter: DTO | any) {
     return this.model.findOne(filter).exec();
   }
+  getCount() {
+    return this.model.count().exec();
+  }
   async findAll(query: QueryDTO) {
     const filter = {};
     // if (query.fields) {
@@ -98,24 +101,5 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
     } else {
       return null;
     }
-  }
-  async join(from: string, field: string) {
-    const result = await this.model
-      .aggregate([
-        {
-          $lookup: {
-            from: from.toLocaleLowerCase() + 's',
-            localField: field,
-            foreignField: 'id',
-            as: from,
-          },
-        },
-      ])
-      .exec();
-    return result.map((item) => {
-      const reVal = item;
-      reVal[from] = item[from][0];
-      return reVal;
-    });
   }
 }
