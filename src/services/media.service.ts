@@ -39,7 +39,7 @@ export class MediaService extends ServiceBase<Media, MediaDocument> {
   }
   getPostFeatureByPostId(id: string) {
     return this._model
-      .findOne({ referenceId: id, type: MEDIA_TYPE.PROFILE_PICTURE })
+      .findOne({ referenceId: id, key: MEDIA_TYPE.FEATURE })
       .exec();
   }
 }

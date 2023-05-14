@@ -21,7 +21,7 @@ import { AuthHelper } from '../helpers/auth.helper';
 import { ResponseHelper } from '../helpers/response.helper';
 import { MediaService } from '../services/media.service';
 
-@Controller()
+@Controller('media')
 export class MediaController {
   constructor(
     private authHelper: AuthHelper,
@@ -43,6 +43,12 @@ export class MediaController {
   async getByKey(@Req() request: Request) {
     const key = request.params.key;
     const result = await this.mediaService.getByKey(key);
+    return this.responseHelper.response(result);
+  }
+  @Get('feature/:id')
+  async getPostFeatureByPostId(@Req() request: Request) {
+    const id = request.params.id;
+    const result = await this.mediaService.getPostFeatureByPostId(id);
     return this.responseHelper.response(result);
   }
 
