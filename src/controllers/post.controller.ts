@@ -20,12 +20,14 @@ import { AuthHelper } from '../helpers/auth.helper';
 import { ResponseHelper } from '../helpers/response.helper';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UserDTO } from 'src/common/dtos/cms/userDTO';
+import { MediaService } from 'src/services/media.service';
 
 @Controller('post')
 export class PostController {
   constructor(
     private authHelper: AuthHelper,
     private postService: PostService,
+    private mediaService: MediaService,
     private responseHelper: ResponseHelper,
   ) {}
   @Get('list')
