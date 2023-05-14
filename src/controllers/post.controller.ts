@@ -20,18 +20,22 @@ import { AuthHelper } from '../helpers/auth.helper';
 import { ResponseHelper } from '../helpers/response.helper';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UserDTO } from 'src/common/dtos/cms/userDTO';
+import { MediaService } from 'src/services/media.service';
 
 @Controller('post')
 export class PostController {
   constructor(
     private authHelper: AuthHelper,
     private postService: PostService,
+    private mediaService: MediaService,
     private responseHelper: ResponseHelper,
   ) {}
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
-    const result = await this.postService.findAll(query);
-    return this.responseHelper.response(result.data, result.count);
+    const result = await this.postService.getPostList(query);
+    const count = await this.postService.getCount();
+
+    return this.responseHelper.response(result, count);
   }
   @Get(':id')
   async getById(@Req() request: Request) {

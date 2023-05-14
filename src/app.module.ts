@@ -23,6 +23,7 @@ import { ResponseHelper } from './helpers/response.helper';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './controllers/auth.controller';
 import { Env } from './env';
+import { ProfileController } from './controllers/profile.controller';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { Env } from './env';
     CategoryController,
     PostController,
     AppController,
+    ProfileController,
   ],
   providers: [
     MediaService,

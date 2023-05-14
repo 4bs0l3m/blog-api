@@ -17,6 +17,9 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
   findOne(filter: DTO | any) {
     return this.model.findOne(filter).exec();
   }
+  getCount() {
+    return this.model.count().exec();
+  }
   async findAll(query: QueryDTO) {
     const filter = {};
     // if (query.fields) {
