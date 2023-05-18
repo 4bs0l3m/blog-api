@@ -30,8 +30,8 @@ jobs:
     - name: Make envfile
     - uses: actions/create-envfile@v3
     - with:
-        mongoDB : mongodb+srv://cemreozer:<password>@cluster0.dpaishy.mongodb.net/
-        secretKey : secretKey
+        mongoDB : ${{ secrets.MONGODB }} 
+        secretKey : ${{ secrets.SECRETKEY }} 
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
