@@ -28,7 +28,7 @@ jobs:
         cache: 'npm'
         
     - name: Make envfile
-    - uses: SpicyPizza/create-envfile@v1.3
+    - uses: actions/create-envfile@v3
     - with:
         mongoDB : mongodb+srv://cemreozer:<password>@cluster0.dpaishy.mongodb.net/
         secretKey : secretKey
