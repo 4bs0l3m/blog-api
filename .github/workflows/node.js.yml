@@ -28,7 +28,7 @@ jobs:
         cache: 'npm'
         
     - name: Make envfile
-      uses: actions/create-envfile@v3
+      uses: actions/checkout@v3
       with:
         mongoDB : ${{ secrets.MONGODB }} 
         secretKey : ${{ secrets.SECRETKEY }} 
