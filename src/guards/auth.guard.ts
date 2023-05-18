@@ -18,8 +18,11 @@ export class AuthGuard implements CanActivate {
     const token: TokenDTO = this.authHelper.extractToken(
       request.headers.authorization,
     );
-
-    return this.checkUser(request, token.userId);
+    if (token) {
+      return this.checkUser(request, token.userId);
+    } else {
+      return false;
+    }
   }
   async checkUser(request, userId) {
     const user = await this.userService.findById(userId);
