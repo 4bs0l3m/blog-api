@@ -32,14 +32,24 @@ export class MediaService extends ServiceBase<Media, MediaDocument> {
       })
       .exec();
   }
-  getProfilePictureByUserId(id: string) {
-    return this._model
-      .findOne({ referenceId: id, type: MEDIA_TYPE.PROFILE_PICTURE })
+  async getProfilePictureByUserId(id: string) {
+    const result = await this._model
+      .findOne({ referenceId: id, key: MEDIA_TYPE.PROFILE_PICTURE })
       .exec();
+    if (result) {
+      return result.toJSON();
+    } else {
+      return null;
+    }
   }
-  getPostFeatureByPostId(id: string) {
-    return this._model
+  async getPostFeatureByPostId(id: string) {
+    const result = await this._model
       .findOne({ referenceId: id, key: MEDIA_TYPE.FEATURE })
       .exec();
+    if (result) {
+      return result.toJSON();
+    } else {
+      return null;
+    }
   }
 }

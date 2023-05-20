@@ -22,12 +22,7 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
   }
   async findAll(query: QueryDTO) {
     const filter = {};
-    // if (query.fields) {
-    //   query.fields.forEach((item) => {
-    //     filter[item.fieldName] = item.value;
-    //   });
-    // }
-    console.log('filter :', filter);
+
     return {
       data: await this.model
         .find(filter)
@@ -43,8 +38,9 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
     return this.model.find(filter).exec();
   }
 
-  findById(id: string) {
-    return this.model.findOne({ id: id }).exec();
+  async findById(id: string) {
+    const result = await this.model.findOne({ id: id }).exec();
+    return result.toJSON();
   }
   async create(model: DTO, userId: string) {
     model.id = this.newGuid();
@@ -53,8 +49,8 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
       createdTime: new Date(),
       active: 1,
     };
-    const createdModel = new this.model(model);
-    return (await createdModel.save()).id;
+    const createdModel = await new this.model(model).save();
+    return createdModel.id;
   }
   async updateById(id, model: DTO | any, userId: string) {
     const _model = await this.model

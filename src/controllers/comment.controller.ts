@@ -16,7 +16,7 @@ import { CommentService } from 'src/services/comment.service';
 import { Request } from 'express';
 import { CommentDTO } from 'src/common/dtos/cms/commentDTO';
 
-@Controller()
+@Controller('comment')
 export class CommentController {
   constructor(
     private authHelper: AuthHelper,

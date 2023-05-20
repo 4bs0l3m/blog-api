@@ -28,7 +28,12 @@ export class ProfileService extends ServiceBase<Profile, ProfileDocument> {
   ) {
     super(_model);
   }
-  getByUserId(id: string) {
-    return this._model.findOne({ userId: id }).exec();
+  async getByUserId(id: string) {
+    const result = await this._model.findOne({ userId: id }).exec();
+    if (result) {
+      return result.toJSON();
+    } else {
+      return null;
+    }
   }
 }
