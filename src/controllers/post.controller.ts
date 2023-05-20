@@ -42,7 +42,13 @@ export class PostController {
     const id = request.params.id;
 
     const result = await this.postService.findById(id);
-    result['feature'] = await this.mediaService.getPostFeatureByPostId(id);
+    return this.responseHelper.response(result);
+  }
+  @Get('feature/:id')
+  async getPostFeature(@Req() request: Request) {
+    const id = request.params.id;
+
+    const result = await this.mediaService.getPostFeatureByPostId(id);
     return this.responseHelper.response(result);
   }
   @Get('list/:categoryId')
@@ -56,9 +62,7 @@ export class PostController {
   @UseGuards(AuthGuard)
   @Post('create')
   async create(@Req() request: Request, @Body() model: PostDTO) {
-    console.log('model :', model);
     const user = <UserDTO>request.user;
-    console.log('user :', user);
 
     const result = await this.postService.create(model, user.id);
     return this.responseHelper.response(result);

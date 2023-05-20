@@ -36,8 +36,6 @@ export class ProfileController {
     result['picture'] = await this.mediaService.getProfilePictureByUserId(
       user.id,
     );
-    console.log('user.id :', user.id);
-
     return this.responseHelper.response(result);
   }
   @Get('list')
