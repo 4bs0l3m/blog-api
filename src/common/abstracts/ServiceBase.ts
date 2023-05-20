@@ -22,12 +22,7 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
   }
   async findAll(query: QueryDTO) {
     const filter = {};
-    // if (query.fields) {
-    //   query.fields.forEach((item) => {
-    //     filter[item.fieldName] = item.value;
-    //   });
-    // }
-    console.log('filter :', filter);
+
     return {
       data: await this.model
         .find(filter)
@@ -45,7 +40,6 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
 
   async findById(id: string) {
     const result = await this.model.findOne({ id: id }).exec();
-    console.log('result :', result);
     return result.toJSON();
   }
   async create(model: DTO, userId: string) {
