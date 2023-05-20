@@ -41,7 +41,8 @@ export class PostController {
   async getById(@Req() request: Request) {
     const id = request.params.id;
 
-    const result = <PostDTO>await this.postService.findById(id);
+    const result = await this.postService.findById(id);
+    result['feature'] = await this.mediaService.getPostFeatureByPostId(id);
     return this.responseHelper.response(result);
   }
   @Get('list/:categoryId')
