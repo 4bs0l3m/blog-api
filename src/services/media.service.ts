@@ -34,7 +34,7 @@ export class MediaService extends ServiceBase<Media, MediaDocument> {
   }
   async getProfilePictureByUserId(id: string) {
     const result = await this._model
-      .findOne({ referenceId: id, type: MEDIA_TYPE.PROFILE_PICTURE })
+      .findOne({ referenceId: id, key: MEDIA_TYPE.PROFILE_PICTURE })
       .exec();
     if (result) {
       return result.toJSON();

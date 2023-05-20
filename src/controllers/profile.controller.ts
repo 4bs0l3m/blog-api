@@ -15,11 +15,13 @@ import { ResponseHelper } from 'src/helpers/response.helper';
 import { ProfileService } from 'src/services/profile.service';
 import { Request } from 'express';
 import { ProfileDTO } from 'src/common/dtos/cms/profileDTO';
+import { MediaService } from 'src/services/media.service';
 
 @Controller('profile')
 export class ProfileController {
   constructor(
     private authHelper: AuthHelper,
+    private mediaService: MediaService,
     private service: ProfileService,
     private responseHelper: ResponseHelper,
   ) {}
@@ -31,6 +33,11 @@ export class ProfileController {
     const user = <UserDTO>request.user;
 
     const result = await this.service.getByUserId(user.id);
+    result['picture'] = await this.mediaService.getProfilePictureByUserId(
+      user.id,
+    );
+    console.log('user.id :', user.id);
+
     return this.responseHelper.response(result);
   }
   @Get('list')
