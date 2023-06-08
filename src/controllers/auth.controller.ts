@@ -4,6 +4,7 @@ https://docs.nestjs.com/controllers#controllers
 */
 
 import {
+  Body,
   Controller,
   Get,
   HttpStatus,
@@ -30,9 +31,9 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  async signIn(@Req() request: Request) {
+  async signIn(@Req() request: Request, @Body() model: any) {
     try {
-      const userCred = request.body;
+      const userCred = model;
       if (userCred) {
         const _user = await this.userService.getUserByEmailPassword(
           userCred.email,
@@ -55,7 +56,7 @@ export class AuthController {
   }
   @UseGuards(AuthGuard)
   @Get('currentUser')
-  async currentUser(@Req() request: Request) {
+  async currentUser(@Req() request: Request, @Body() model: any) {
     try {
       const user = <UserDTO>request.user;
       if (user) {
@@ -77,9 +78,10 @@ export class AuthController {
   }
 
   @Post('signup')
-  async signUp(@Req() request: Request) {
+  async signUp(@Req() request: Request, @Body() model: any) {
+    console.log('model :', model);
     try {
-      const userCred: User = request.body;
+      const userCred: User = model;
       const user = new User();
       if (userCred) {
         user.activate = true;
