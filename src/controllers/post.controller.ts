@@ -56,14 +56,14 @@ export class PostController {
     const categoryId = request.params.categoryId;
 
     const result = await this.postService.getByCategoryId(categoryId, query);
-    return this.responseHelper.response(result.data, result.count);
+    return this.responseHelper.response(result, 0);
   }
 
   @UseGuards(AuthGuard)
   @Post('create')
   async create(@Req() request: Request, @Body() model: PostDTO) {
     const user = <UserDTO>request.user;
-
+    model.authorId = user.id;
     const result = await this.postService.create(model, user.id);
     return this.responseHelper.response(result);
   }
@@ -71,13 +71,10 @@ export class PostController {
   @UseGuards(AuthGuard)
   @Post('update')
   async update(@Req() request: Request, @Body() model: PostDTO) {
-    const user = this.authHelper.extractToken(request.headers.authorization);
+    const user = <UserDTO>request.user;
+    model.authorId = user.id;
 
-    const result = await this.postService.updateById(
-      model.id,
-      model,
-      user.userId,
-    );
+    const result = await this.postService.updateById(model.id, model, user.id);
     return this.responseHelper.response(result);
   }
 

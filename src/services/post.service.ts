@@ -26,15 +26,11 @@ export class PostService extends ServiceBase<Post, PostDocument> {
     super(_model);
   }
   async getByCategoryId(id: string, query: QueryDTO) {
-    return {
-      data: await this._model
-        .find({ categoryId: id })
-        .limit(Number(query.limit))
-        .skip(Number(query.limit))
-        .sort(query.orderBy)
-        .exec(),
-      count: await this._model.find({ categoryId: id }).count().exec(),
-    };
+    return await this._model
+      .find({ categoryId: id })
+      .limit(Number(query.limit))
+      .skip(Number(query.limit))
+      .sort(query.orderBy);
   }
   async getPostList(query: QueryDTO) {
     const result = await this._model

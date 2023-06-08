@@ -1,3 +1,6 @@
+/*
+https://docs.nestjs.com/controllers#controllers
+*/
 import {
   Controller,
   Get,
@@ -14,34 +17,25 @@ import { AuthHelper } from 'src/helpers/auth.helper';
 import { ResponseHelper } from 'src/helpers/response.helper';
 import { ProfileService } from 'src/services/profile.service';
 import { Request } from 'express';
-import { ProfileDTO } from 'src/common/dtos/cms/profileDTO';
 import { MediaService } from 'src/services/media.service';
+import { UserService } from 'src/services/user.service';
 
-@Controller('profile')
-export class ProfileController {
+@Controller('user')
+export class UserController {
   constructor(
     private authHelper: AuthHelper,
     private mediaService: MediaService,
-    private service: ProfileService,
+    private service: UserService,
     private responseHelper: ResponseHelper,
   ) {}
 
   @UseGuards(AuthGuard)
-  @Get('my')
-  async getMyProfile(@Req() request: Request) {
-    // const id = request.params.id;
-    const user = <UserDTO>request.user;
-
-    const result = await this.service.getByUserId(user.id);
-
-    return this.responseHelper.response(result);
-  }
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
     const result = await this.service.findAll(query);
     return this.responseHelper.response(result.data, result.count);
   }
-
+  @UseGuards(AuthGuard)
   @Get(':id')
   async getById(@Req() request: Request) {
     const id = request.params.id;
@@ -51,17 +45,15 @@ export class ProfileController {
 
   @UseGuards(AuthGuard)
   @Post('create')
-  async create(@Req() request: Request, @Body() model: ProfileDTO) {
+  async create(@Req() request: Request, @Body() model: UserDTO) {
     const user = <UserDTO>request.user;
-    const profile = model;
-    profile.userId = user.id;
-    const result = await this.service.create(profile, user.id);
+    const result = await this.service.create(model, user.id);
     return this.responseHelper.response(result);
   }
 
   @UseGuards(AuthGuard)
   @Post('update')
-  async update(@Req() request: Request, @Body() model: ProfileDTO) {
+  async update(@Req() request: Request, @Body() model: UserDTO) {
     const user = <UserDTO>request.user;
     const result = await this.service.updateById(model.id, model, user.id);
     return this.responseHelper.response(result);
