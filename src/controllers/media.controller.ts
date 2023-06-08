@@ -51,6 +51,12 @@ export class MediaController {
     const result = await this.mediaService.getPostFeatureByPostId(id);
     return this.responseHelper.response(result);
   }
+  @Get('profile/:id')
+  async getProfileMediaByPostId(@Req() request: Request) {
+    const id = request.params.id;
+    const result = await this.mediaService.getProfilePictureByUserId(id);
+    return this.responseHelper.response(result);
+  }
 
   @UseGuards(AuthGuard)
   @Post('create')

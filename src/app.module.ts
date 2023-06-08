@@ -1,3 +1,4 @@
+import { UserController } from './controllers/user.controller';
 import { MediaController } from './controllers/media.controller';
 import { Media, MediaSchema, MediaService } from './services/media.service';
 import { CategoryController } from './controllers/category.controller';
@@ -41,6 +42,7 @@ import { ProfileController } from './controllers/profile.controller';
     ]),
   ],
   controllers: [
+    UserController,
     AuthController,
     MediaController,
     CategoryController,
