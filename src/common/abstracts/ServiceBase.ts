@@ -42,7 +42,7 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
     const result = await this.model.findOne({ id: id }).exec();
     return result.toJSON();
   }
-  async create(model: DTO, userId: string) {
+  async create(model: DTO | any, userId: string) {
     model.id = this.newGuid();
     model.metadata = {
       createdBy: userId,

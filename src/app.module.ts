@@ -1,3 +1,4 @@
+import { StatusController } from './controllers/status.controller';
 import { UserController } from './controllers/user.controller';
 import { MediaController } from './controllers/media.controller';
 import { Media, MediaSchema, MediaService } from './services/media.service';
@@ -25,6 +26,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './controllers/auth.controller';
 import { Env } from './env';
 import { ProfileController } from './controllers/profile.controller';
+import { Status, StatusSchema, StatusService } from './services/status.service';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { ProfileController } from './controllers/profile.controller';
     }),
     MongooseModule.forRoot(Env.mongoDb),
     MongooseModule.forFeature([
+      { name: Status.name, schema: StatusSchema },
       { name: User.name, schema: UserSchema },
       { name: Post.name, schema: PostSchema },
       { name: Category.name, schema: CategorySchema },
@@ -42,6 +45,7 @@ import { ProfileController } from './controllers/profile.controller';
     ]),
   ],
   controllers: [
+    StatusController,
     UserController,
     AuthController,
     MediaController,
@@ -51,6 +55,7 @@ import { ProfileController } from './controllers/profile.controller';
     ProfileController,
   ],
   providers: [
+    StatusService,
     MediaService,
     CategoryService,
     AuthHelper,
