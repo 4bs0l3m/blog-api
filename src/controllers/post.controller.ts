@@ -21,6 +21,8 @@ import { ResponseHelper } from '../helpers/response.helper';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UserDTO } from 'src/common/dtos/cms/userDTO';
 import { MediaService } from 'src/services/media.service';
+import { StatusService } from 'src/services/status.service';
+import { POST_STATUS_KEYS } from 'src/common/const/status.const';
 
 @Controller('post')
 export class PostController {
@@ -29,6 +31,7 @@ export class PostController {
     private postService: PostService,
     private mediaService: MediaService,
     private responseHelper: ResponseHelper,
+    private statusService: StatusService,
   ) {}
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
@@ -65,6 +68,11 @@ export class PostController {
     const user = <UserDTO>request.user;
     model.authorId = user.id;
     const result = await this.postService.create(model, user.id);
+    this.statusService.createPostStatus(
+      result.id,
+      user.id,
+      POST_STATUS_KEYS.DRAFT,
+    );
     return this.responseHelper.response(result);
   }
 
