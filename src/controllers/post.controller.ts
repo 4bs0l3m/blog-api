@@ -44,6 +44,14 @@ export class PostController {
     const result = await this.postService.findById(id);
     return this.responseHelper.response(result);
   }
+  @Get('getTopPostByUserId/:id')
+  async getTopPostByUserId(@Req() request: Request) {
+    const id = request.params.id;
+
+    const result = await this.postService.getTopPostByUserId(id);
+    return this.responseHelper.response(result);
+  }
+
   @Get('feature/:id')
   async getPostFeature(@Req() request: Request) {
     const id = request.params.id;

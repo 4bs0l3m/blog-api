@@ -60,4 +60,14 @@ export class PostService extends ServiceBase<Post, PostDocument> {
       return reVal;
     });
   }
+  async getTopPostByUserId(userId: string) {
+    const result = await this._model
+      .find({ authorId: userId })
+      .limit(Number(10))
+      .skip(Number(0))
+      .sort()
+      .exec();
+
+    return result;
+  }
 }
