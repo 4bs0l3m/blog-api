@@ -4,6 +4,7 @@ import { AuthHelper } from 'src/helpers/auth.helper';
 import { Request } from 'express';
 import { TokenDTO } from 'src/common/dtos/common/TokenDTO';
 import { UserService } from 'src/services/user.service';
+import { UserDTO } from 'src/common/dtos/cms/userDTO';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,8 +26,8 @@ export class AuthGuard implements CanActivate {
     }
   }
   async checkUser(request, userId) {
-    const user = await this.userService.findById(userId);
-    if (user && user.id) {
+    const user: any = await this.userService.findById(userId);
+    if (user && user.id && user.activate) {
       request.user = user;
       return true;
     }
