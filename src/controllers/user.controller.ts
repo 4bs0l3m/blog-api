@@ -33,6 +33,10 @@ export class UserController {
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
     const result = await this.service.findAll(query);
+    result.data.forEach((item) => {
+      item['password'] = '';
+      return item;
+    });
     return this.responseHelper.response(result.data, result.count);
   }
   @UseGuards(AuthGuard)
@@ -40,6 +44,7 @@ export class UserController {
   async getById(@Req() request: Request) {
     const id = request.params.id;
     const result = await this.service.findById(id);
+    result['password'] = '';
     return this.responseHelper.response(result);
   }
 
@@ -65,6 +70,30 @@ export class UserController {
     const id = request.params.id;
     const user = <UserDTO>request.user;
     const result = await this.service.deleteById(id, user.id);
+    return this.responseHelper.response(result);
+  }
+  @UseGuards(AuthGuard)
+  @Get('activate/:id')
+  async activate(@Req() request: Request) {
+    const id = request.params.id;
+    const user = <UserDTO>request.user;
+    const model = await this.service.findById(id);
+    model['activate'] = true;
+
+    const result = await this.service.updateById(model.id, model, user.id);
+
+    return this.responseHelper.response(result);
+  }
+  @UseGuards(AuthGuard)
+  @Get('deactivate/:id')
+  async deActivate(@Req() request: Request) {
+    const id = request.params.id;
+    const user = <UserDTO>request.user;
+    const model = await this.service.findById(id);
+    model['activate'] = false;
+
+    const result = await this.service.updateById(model.id, model, user.id);
+
     return this.responseHelper.response(result);
   }
 }
