@@ -7,6 +7,8 @@ import { Injectable } from '@nestjs/common';
 @Schema()
 export class User extends BaseDTO {
   @Prop()
+  username: string;
+  @Prop()
   email: string;
   @Prop()
   password: string;

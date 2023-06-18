@@ -15,42 +15,34 @@ import { QueryDTO } from 'src/common/dtos/common/QueryDTO';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthHelper } from 'src/helpers/auth.helper';
 import { ResponseHelper } from 'src/helpers/response.helper';
-import { ProfileService } from 'src/services/profile.service';
 import { Request } from 'express';
-import { MediaService } from 'src/services/media.service';
-import { UserService } from 'src/services/user.service';
+import { StatusService } from 'src/services/status.service';
+import { StatusDTO } from 'src/common/dtos/cms/statusDTO';
 
-@Controller('user')
-export class UserController {
+@Controller()
+export class StatusController {
   constructor(
     private authHelper: AuthHelper,
-    private mediaService: MediaService,
-    private service: UserService,
+    private service: StatusService,
     private responseHelper: ResponseHelper,
   ) {}
 
-  @UseGuards(AuthGuard)
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
     const result = await this.service.findAll(query);
-    result.data.forEach((item) => {
-      item['password'] = '';
-      return item;
-    });
     return this.responseHelper.response(result.data, result.count);
   }
-  @UseGuards(AuthGuard)
+
   @Get(':id')
   async getById(@Req() request: Request) {
     const id = request.params.id;
     const result = await this.service.findById(id);
-    result['password'] = '';
     return this.responseHelper.response(result);
   }
 
   @UseGuards(AuthGuard)
   @Post('create')
-  async create(@Req() request: Request, @Body() model: UserDTO) {
+  async create(@Req() request: Request, @Body() model: StatusDTO) {
     const user = <UserDTO>request.user;
     const result = await this.service.create(model, user.id);
     return this.responseHelper.response(result);
@@ -58,7 +50,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Post('update')
-  async update(@Req() request: Request, @Body() model: UserDTO) {
+  async update(@Req() request: Request, @Body() model: StatusDTO) {
     const user = <UserDTO>request.user;
     const result = await this.service.updateById(model.id, model, user.id);
     return this.responseHelper.response(result);
@@ -70,30 +62,6 @@ export class UserController {
     const id = request.params.id;
     const user = <UserDTO>request.user;
     const result = await this.service.deleteById(id, user.id);
-    return this.responseHelper.response(result);
-  }
-  @UseGuards(AuthGuard)
-  @Get('activate/:id')
-  async activate(@Req() request: Request) {
-    const id = request.params.id;
-    const user = <UserDTO>request.user;
-    const model = await this.service.findById(id);
-    model['activate'] = true;
-
-    const result = await this.service.updateById(model.id, model, user.id);
-
-    return this.responseHelper.response(result);
-  }
-  @UseGuards(AuthGuard)
-  @Get('deactivate/:id')
-  async deActivate(@Req() request: Request) {
-    const id = request.params.id;
-    const user = <UserDTO>request.user;
-    const model = await this.service.findById(id);
-    model['activate'] = false;
-
-    const result = await this.service.updateById(model.id, model, user.id);
-
     return this.responseHelper.response(result);
   }
 }

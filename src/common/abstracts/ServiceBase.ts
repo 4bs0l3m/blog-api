@@ -42,7 +42,7 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
     const result = await this.model.findOne({ id: id }).exec();
     return result.toJSON();
   }
-  async create(model: DTO, userId: string) {
+  async create(model: DTO | any, userId: string) {
     model.id = this.newGuid();
     model.metadata = {
       createdBy: userId,
@@ -59,8 +59,14 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
       })
       .exec();
     if (_model) {
-      _model.metadata.modifiedBy = userId;
-      _model.metadata.modifiedTime = new Date();
+      if (_model.metadata) {
+        _model.metadata.modifiedBy = userId;
+        _model.metadata.modifiedTime = new Date();
+      } else {
+        _model.metadata = {};
+        _model.metadata.modifiedBy = userId;
+        _model.metadata.modifiedTime = new Date();
+      }
       model.metadata = _model.metadata;
       model.id = _model.id;
       const updatedModel = await this.model.findOneAndUpdate(
@@ -86,8 +92,14 @@ export class ServiceBase<DTO extends BaseDTO, Document extends BaseDTO> {
         .exec()
     ).toObject<DTO>();
     if (_model) {
-      _model.metadata.modifiedBy = userId;
-      _model.metadata.modifiedTime = new Date();
+      if (_model.metadata) {
+        _model.metadata.modifiedBy = userId;
+        _model.metadata.modifiedTime = new Date();
+      } else {
+        _model.metadata = {};
+        _model.metadata.modifiedBy = userId;
+        _model.metadata.modifiedTime = new Date();
+      }
       _model.metadata.active = 2;
       const deletedModel = await this.model.findOneAndUpdate(
         { id: id },

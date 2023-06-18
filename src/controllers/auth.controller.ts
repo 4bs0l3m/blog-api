@@ -86,6 +86,7 @@ export class AuthController {
       if (userCred) {
         user.activate = true;
         user.email = userCred.email;
+        user.username = userCred.username;
         user.password = userCred.password;
         const _user = await this.userService.create(user, '');
         if (_user) {
