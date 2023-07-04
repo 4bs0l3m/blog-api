@@ -51,12 +51,21 @@ export class PostService extends ServiceBase<Post, PostDocument> {
             as: 'category',
           },
         },
+        {
+          $lookup: {
+            from: 'statuses',
+            localField: 'id',
+            foreignField: 'referenceId',
+            as: 'status',
+          },
+        },
       ])
       .exec();
     return result.map((item) => {
       const reVal = item;
       reVal['user'] = item['user'][0];
       reVal['category'] = item['category'][0];
+      reVal['status'] = item['status'][0];
       return reVal;
     });
   }

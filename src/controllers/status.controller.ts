@@ -13,16 +13,14 @@ import {
 import { UserDTO } from 'src/common/dtos/cms/userDTO';
 import { QueryDTO } from 'src/common/dtos/common/QueryDTO';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { AuthHelper } from 'src/helpers/auth.helper';
 import { ResponseHelper } from 'src/helpers/response.helper';
 import { Request } from 'express';
 import { StatusService } from 'src/services/status.service';
 import { StatusDTO } from 'src/common/dtos/cms/statusDTO';
 
-@Controller()
+@Controller("status")
 export class StatusController {
   constructor(
-    private authHelper: AuthHelper,
     private service: StatusService,
     private responseHelper: ResponseHelper,
   ) {}
