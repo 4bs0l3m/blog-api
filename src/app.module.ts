@@ -1,3 +1,4 @@
+import { ChatController } from './controllers/chat.controller';
 import { PageController } from './controllers/page.controller';
 import { StatusController } from './controllers/status.controller';
 import { UserController } from './controllers/user.controller';
@@ -48,6 +49,7 @@ import { Page, PageSchema, PageService } from './services/page.service';
     ]),
   ],
   controllers: [
+    ChatController,
     PageController,
     StatusController,
     UserController,
