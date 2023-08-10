@@ -1,3 +1,5 @@
+import { ChatController } from './controllers/chat.controller';
+import { PageController } from './controllers/page.controller';
 import { StatusController } from './controllers/status.controller';
 import { UserController } from './controllers/user.controller';
 import { MediaController } from './controllers/media.controller';
@@ -27,6 +29,7 @@ import { AuthController } from './controllers/auth.controller';
 import { Env } from './env';
 import { ProfileController } from './controllers/profile.controller';
 import { Status, StatusSchema, StatusService } from './services/status.service';
+import { Page, PageSchema, PageService } from './services/page.service';
 
 @Module({
   imports: [
@@ -42,9 +45,12 @@ import { Status, StatusSchema, StatusService } from './services/status.service';
       { name: Category.name, schema: CategorySchema },
       { name: Profile.name, schema: ProfileSchema },
       { name: Media.name, schema: MediaSchema },
+      { name: Page.name, schema: PageSchema },
     ]),
   ],
   controllers: [
+    ChatController,
+    PageController,
     StatusController,
     UserController,
     AuthController,
@@ -55,6 +61,7 @@ import { Status, StatusSchema, StatusService } from './services/status.service';
     ProfileController,
   ],
   providers: [
+    PageService,
     StatusService,
     MediaService,
     CategoryService,
