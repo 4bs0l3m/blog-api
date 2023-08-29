@@ -12,6 +12,8 @@ export class Post extends BaseDTO {
   @Prop()
   categoryId: string;
   @Prop()
+  type:string;
+  @Prop()
   title: string;
   @Prop()
   content: string;

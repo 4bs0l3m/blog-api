@@ -30,6 +30,7 @@ import { Env } from './env';
 import { ProfileController } from './controllers/profile.controller';
 import { Status, StatusSchema, StatusService } from './services/status.service';
 import { Page, PageSchema, PageService } from './services/page.service';
+import { CommentSchema, CommentService,Comment } from './services/comment.service';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { Page, PageSchema, PageService } from './services/page.service';
       { name: Profile.name, schema: ProfileSchema },
       { name: Media.name, schema: MediaSchema },
       { name: Page.name, schema: PageSchema },
+      { name: Comment.name, schema: CommentSchema },
     ]),
   ],
   controllers: [
@@ -71,6 +73,7 @@ import { Page, PageSchema, PageService } from './services/page.service';
     UserService,
     PostService,
     AppService,
+    CommentService
   ],
 })
 export class AppModule {}

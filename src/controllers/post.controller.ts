@@ -23,12 +23,14 @@ import { UserDTO } from 'src/common/dtos/cms/userDTO';
 import { MediaService } from 'src/services/media.service';
 import { StatusService } from 'src/services/status.service';
 import { POST_STATUS_KEYS } from 'src/common/const/status.const';
+import { CommentService } from 'src/services/comment.service';
 
 @Controller('post')
 export class PostController {
   constructor(
     private authHelper: AuthHelper,
     private postService: PostService,
+    private commentService:CommentService,
     private mediaService: MediaService,
     private responseHelper: ResponseHelper,
     private statusService: StatusService,
@@ -39,6 +41,12 @@ export class PostController {
     const count = await this.postService.getCount();
 
     return this.responseHelper.response(result, count);
+  }
+  @Get('comments/:id')
+  async getComments(@Req() request: Request, @Query() query: QueryDTO) {
+    const result = await this.commentService.findById(request["id"]);
+
+    return this.responseHelper.response(result);
   }
   @Get(':id')
   async getById(@Req() request: Request) {
@@ -70,6 +78,23 @@ export class PostController {
     return this.responseHelper.response(result, 0);
   }
 
+  @UseGuards(AuthGuard)
+  @Get('setStatus/:id/:status')
+  async setStatus(@Req() request: Request, @Body() model: PostDTO) {
+    const user = <UserDTO>request.user;
+    
+    if(request['id'] && request['status']){
+
+      const model = await this.postService.findById(request['id']);
+      
+      const result =this.statusService.createPostStatus(
+        model.id,
+        user.id,
+        request['status'],
+        );
+        return this.responseHelper.response(result);
+      }
+  }
   @UseGuards(AuthGuard)
   @Post('create')
   async create(@Req() request: Request, @Body() model: PostDTO) {

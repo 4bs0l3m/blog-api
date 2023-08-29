@@ -26,4 +26,7 @@ export class CommentService extends ServiceBase<Comment, CommentDocument> {
   ) {
     super(_model);
   }
+  getCommentsByPostId(id:string){
+    return this._model.find({postId:id})
+  }
 }

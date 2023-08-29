@@ -18,8 +18,9 @@ import { ResponseHelper } from 'src/helpers/response.helper';
 import { Request } from 'express';
 import { StatusService } from 'src/services/status.service';
 import { StatusDTO } from 'src/common/dtos/cms/statusDTO';
+import { POST_STATUS_KEYS } from 'src/common/const/status.const';
 
-@Controller()
+@Controller("status")
 export class StatusController {
   constructor(
     private authHelper: AuthHelper,
@@ -29,10 +30,10 @@ export class StatusController {
 
   @Get('list')
   async list(@Req() request: Request, @Query() query: QueryDTO) {
-    const result = await this.service.findAll(query);
-    return this.responseHelper.response(result.data, result.count);
+    const result = POST_STATUS_KEYS
+    return this.responseHelper.response(result);
   }
-
+  
   @Get(':id')
   async getById(@Req() request: Request) {
     const id = request.params.id;

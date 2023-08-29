@@ -41,6 +41,7 @@ export class CommentController {
   @Post('create')
   async create(@Req() request: Request, @Body() model: CommentDTO) {
     const user = <UserDTO>request.user;
+    model.userId=user.id;
     const result = await this.service.create(model, user.id);
     return this.responseHelper.response(result);
   }
@@ -49,7 +50,9 @@ export class CommentController {
   @Post('update')
   async update(@Req() request: Request, @Body() model: CommentDTO) {
     const user = <UserDTO>request.user;
-    const result = await this.service.updateById(model.id, model, user.id);
+    const updatedModel=<CommentDTO>await this.service.findById(model.id)
+    updatedModel.text=model.text;
+    const result = await this.service.updateById(model.id, updatedModel, user.id);
     return this.responseHelper.response(result);
   }
 
