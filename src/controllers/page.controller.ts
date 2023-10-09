@@ -19,7 +19,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { ResponseHelper } from 'src/helpers/response.helper';
 import { PageService } from 'src/services/page.service';
 
-@Controller()
+@Controller('page')
 export class PageController {
   constructor(
     private service: PageService,

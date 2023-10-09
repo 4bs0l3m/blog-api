@@ -1,3 +1,4 @@
+import { ChatGateway } from './gateways/chat.gateway';
 import { ChatController } from './controllers/chat.controller';
 import { PageController } from './controllers/page.controller';
 import { StatusController } from './controllers/status.controller';
@@ -61,6 +62,7 @@ import { Page, PageSchema, PageService } from './services/page.service';
     ProfileController,
   ],
   providers: [
+    ChatGateway,
     PageService,
     StatusService,
     MediaService,
