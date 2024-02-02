@@ -53,6 +53,7 @@ export class UserController {
   async create(@Req() request: Request, @Body() model: UserDTO) {
     const user = <UserDTO>request.user;
     const result = await this.service.create(model, user.id);
+    result['password'] = '';
     return this.responseHelper.response(result);
   }
 
@@ -61,6 +62,7 @@ export class UserController {
   async update(@Req() request: Request, @Body() model: UserDTO) {
     const user = <UserDTO>request.user;
     const result = await this.service.updateById(model.id, model, user.id);
+    result['password'] = '';
     return this.responseHelper.response(result);
   }
 
@@ -70,6 +72,7 @@ export class UserController {
     const id = request.params.id;
     const user = <UserDTO>request.user;
     const result = await this.service.deleteById(id, user.id);
+    result['password'] = '';
     return this.responseHelper.response(result);
   }
   @UseGuards(AuthGuard)
@@ -81,7 +84,7 @@ export class UserController {
     model['activate'] = true;
 
     const result = await this.service.updateById(model.id, model, user.id);
-
+    result['password'] = '';
     return this.responseHelper.response(result);
   }
   @UseGuards(AuthGuard)
@@ -93,7 +96,7 @@ export class UserController {
     model['activate'] = false;
 
     const result = await this.service.updateById(model.id, model, user.id);
-
+    result['password'] = '';
     return this.responseHelper.response(result);
   }
 }
